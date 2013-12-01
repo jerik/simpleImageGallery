@@ -2,30 +2,40 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
 
-	<title>Sandbox Image Gallery</title>
+	<title>Dead Simple Dynamic Image Gallery</title>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script type="text/javascript" charset="utf-8">
-		// http://alexgorbatchev.com/SyntaxHighlighter/
-		// http://www.craftyfella.com/2010/01/syntax-highlighting-with-blogger-engine.html
-		$.get( "http://jerik.de/sandbox/images/", function(  my_var ) { 
-				    // my_var contains whatever that request returned
-			html = $.parseHTML( my_var );
-			//$( '#calvin' ).text( JSON.stringify( my_var ) );
 
-			pattern = html.find( 'table' );
+		// Array that will hold the images
+		var images = new Array(  );
 
-			console.log( pattern );
-			//$.each ( html, function( i, el ) { console.log( el.nodeName ); } );
-			//$( '#calvin' ).text( $( my_var ).find( 'a' ).attr( 'href' ) );
+		// Url where to the folder where the images are located
+		// E.g.: http://example.de/images
+		var imgFolder = 'http://jerik.de/sandbox/images/';
+
+		$.get( imgFolder, function(  my_var ) { 
+
+			var parsed = $( '<div/>' ).append( my_var );
+			var as = parsed.find( 'a' );
+			// collect the images, currently only png's
+			as.each( function( index, value ) { 
+				if ( $( this ).text(  ).match( /png/ ) ) { 
+				images.push( $( this ).text(  ) );
+				}
+			} );
+
+			// Add the images to the div
+			$.each( images, function( index, value ) { 
+				var img = $( '<img />' ).attr( { 'src' : imgFolder + value } ).appendTo( $( '#calvin') );
+			} );
+
 		}); 
+
 	</script>
 	
 </head>
 <body>
-	<div id="calvin">
-		das ist ein test
-		
-	</div>
-	
+	<h2>Dead Simple Dynamic Image Gallery</h2>
+	<div id="calvin"></div>
 </body>
 </html>
